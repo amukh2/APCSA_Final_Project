@@ -20,9 +20,9 @@ public class Game {
     public static int  left_x, right_x, top_y, bottom_y;
 
     Mino currentMino;
-    final int MINO_START_X, MINO_START_Y;
+    int MINO_START_X, MINO_START_Y;
     Mino nextMino;
-    final int NEXTMINO_X, NEXTMINO_Y;
+    int NEXTMINO_X, NEXTMINO_Y;
 
     public static ArrayList<Block> staticBlocks = new ArrayList<Block>();
 
@@ -38,6 +38,8 @@ public class Game {
      int level = 1;
      int lines;
      int score;
+
+     public static int invert;
 
     public Game() {
         left_x = ((GamePanel.WIDTH)/2) - (WIDTH/2);
@@ -85,13 +87,20 @@ public class Game {
     }
 
     private void Invert() {
-        
+        if (invert == 1) {
+            MINO_START_Y = bottom_y - Block.SIZE;
+            for (int i = 0; i < staticBlocks.size(); i++) {
+                staticBlocks.get(i).y = bottom_y - staticBlocks.get(i).y;
+            }
+        } else {
+            MINO_START_Y = top_y + Block.SIZE;
+        }
     }
 
     private void PowerUps() {
         Timer timer = new Timer();
-        if (currentMino.powerUp == true) {
-            int i = new Random().nextInt(4);
+        if (currentMino.powerUp) {
+            int i = new Random().nextInt(3);
 
             switch (i) {
                 case 0: // Speed Up
@@ -119,6 +128,11 @@ public class Game {
                         break; 
 
                 case 2: // Invert
+                        if (invert == 0) {
+                            invert = 1;
+                        } else {
+                            invert = 0;
+                        }
                         Invert();
                         break;
             }
