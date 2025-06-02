@@ -13,8 +13,13 @@ public class Block extends Rectangle{
         this.c = c;
     }
 
+    public void setColor(Color c) {
+        this.c = c;
+    }
+
     public void draw(Graphics2D g2) {
+        int margin = 2;
         g2.setColor(c);
-        g2.fillRect(x, y, SIZE, SIZE);
+        g2.fillRect(x+margin, y+margin, SIZE-(margin*2), SIZE-(margin*2));
     }
 }
