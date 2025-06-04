@@ -17,18 +17,10 @@ public class KeyHandler implements KeyListener{
         int code = e.getKeyCode();
         
         if(code == KeyEvent.VK_W) {
-            if (Game.invert == 0) {
-                up = true;
-            } else {
-                down = true;
-            }
+            up = true;
         }
         if(code == KeyEvent.VK_S) {
-            if (Game.invert == 0) {
-                down = true;
-            } else {
-                up = true;
-            }
+            down = true;
         }
         if(code == KeyEvent.VK_A) {
             left = true;

@@ -39,7 +39,8 @@ public class Game {
      int lines;
      int score;
 
-     public static int invert;
+     public static int invert = 0;
+     static boolean inverting;
 
     public Game() {
         left_x = ((GamePanel.WIDTH)/2) - (WIDTH/2);
@@ -87,35 +88,40 @@ public class Game {
     }
 
     private void Invert() {
-        if (invert == 1) {
-            MINO_START_Y = bottom_y - Block.SIZE;
-            for (int i = 0; i < staticBlocks.size(); i++) {
-                staticBlocks.get(i).y = bottom_y - staticBlocks.get(i).y;
-            }
+        inverting = true;
+        if (invert == 0) {
+            invert = 1;
         } else {
-            MINO_START_Y = top_y + Block.SIZE;
+            invert = 0;
         }
+            for (int i = 0; i < staticBlocks.size(); i++) {
+                int temp = MINO_START_X - staticBlocks.get(i).x;
+
+                staticBlocks.get(i).x = MINO_START_X + temp + Block.SIZE;
+                
+            }
+        
     }
 
     private void PowerUps() {
         Timer timer = new Timer();
         if (currentMino.powerUp) {
-            int i = new Random().nextInt(3);
+            int random = new Random().nextInt(9);
 
-            switch (i) {
-                case 0: // Speed Up
+            switch (random) {
+                case 0, 1, 2: // Speed Up
                         dropInterval /= 2;
                         timer.schedule(new TimerTask() {
 
                             @Override
                             public void run() {
-                                dropInterval *= 2;
+                                dropInterval *= 3;
                             }
                             
                         }, 20000);
                         break;
 
-                case 1: // Slow Down
+                case 3, 4, 5: // Slow Down
                         dropInterval *= 2;
                         timer.schedule(new TimerTask() {
 
@@ -127,12 +133,11 @@ public class Game {
                         }, 20000);
                         break; 
 
-                case 2: // Invert
-                        if (invert == 0) {
-                            invert = 1;
-                        } else {
-                            invert = 0;
-                        }
+                case 6: // Clear                       
+                        staticBlocks.clear();
+                        break;
+
+                case 7, 8, 9: // Invert x
                         Invert();
                         break;
             }
@@ -181,10 +186,11 @@ public class Game {
         while (x < right_x && y < bottom_y) {
 
             for (int i = 0; i < staticBlocks.size(); i++) {
-                if (staticBlocks.get(i).x == x && staticBlocks.get(i).y == y) {
+                if (staticBlocks.get(i).x == x && staticBlocks.get(i).y == y && !inverting) {
                     blockCount++;
                 }
             }
+            inverting = false;
 
             x += Block.SIZE;
 

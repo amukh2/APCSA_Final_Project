@@ -15,7 +15,7 @@ public class Mino {
 
     public int rotation = 1;
 
-    boolean leftCollision, rightCollision, bottomCollision, topCollision;
+    boolean leftCollision, rightCollision, bottomCollision;
 
     public boolean active = true;
 
@@ -42,7 +42,7 @@ public class Mino {
 
         checkRotationCollision();
 
-        if (!rightCollision && !leftCollision && !bottomCollision && !topCollision) {
+        if (!rightCollision && !leftCollision && !bottomCollision) {
             this.rotation = direction;
 
             b[0].x = tempB[0].x;
@@ -80,19 +80,11 @@ public class Mino {
             }
         }
 
-         if (Game.invert == 1) {
-             for (int i = 0; i < b.length; i++) {
-                 if (b[i].y - Block.SIZE == Game.top_y) {
-                     topCollision = true;
-                 }
-             }
-         } else {
              for (int i = 0; i < b.length; i++) {
                  if(b[i].y + Block.SIZE == Game.bottom_y) {
                      bottomCollision  = true;
                  }
              }
-         }
     }
 
 
@@ -115,19 +107,13 @@ public class Mino {
             }
         }
 
-        if (Game.invert == 1) {
-            for (int i = 0; i < b.length; i++) {
-                if(tempB[i].y - Block.SIZE < Game.top_y) {
-                    topCollision  = true;
-                }
-            }
-        } else {
+        
             for (int i = 0; i < b.length; i++) {
                 if (tempB[i].y + Block.SIZE > Game.bottom_y) {
                     bottomCollision = true;
                 }
             }
-        }
+        
     }
 
     private void checkStaticBlockCollision() {
@@ -136,19 +122,12 @@ public class Mino {
             int targetX = Game.staticBlocks.get(i).x;
             int targetY = Game.staticBlocks.get(i).y;
 
-            if (Game.invert == 1) {
-                for (int j = 0; j < b.length; j++) {
-                    if (b[j].y - Block.SIZE == targetY && b[j].x == targetX) {
-                        bottomCollision = true;
-                    }
-                }
-            } else {
                 for (int j = 0; j < b.length; j++) {
                     if (b[j].y + Block.SIZE == targetY && b[j].x == targetX) {
                         bottomCollision = true;
                     }
                 }
-            }
+            
 
             for (int j = 0; j < b.length; j++) {
                 if (b[j].x - Block.SIZE == targetX && b[j].y == targetY) {
@@ -170,7 +149,7 @@ public class Mino {
             deactivating();
         }
 
-        if(KeyHandler.up) {
+        if((KeyHandler.up)) {
             switch(rotation) {
                 case 1: getDirection2(); break;
                 case 2: getDirection3(); break;
@@ -184,7 +163,7 @@ public class Mino {
         checkMovementCollision();
 
         if(KeyHandler.down) {
-            if (bottomCollision == false) {
+            if (!bottomCollision) {
                 b[0].y += Block.SIZE;
                 b[1].y += Block.SIZE;
                 b[2].y += Block.SIZE;
@@ -222,17 +201,11 @@ public class Mino {
 
         } else {
             autoDropCounter++;
-            if (autoDropCounter == Game.dropInterval && Game.invert == 0) {
+            if (autoDropCounter == Game.dropInterval) {
                 b[0].y += Block.SIZE;
                 b[1].y += Block.SIZE;
                 b[2].y += Block.SIZE;
                 b[3].y += Block.SIZE;
-                autoDropCounter = 0;
-            } else {
-                b[0].y -= Block.SIZE;
-                b[1].y -= Block.SIZE;
-                b[2].y -= Block.SIZE;
-                b[3].y -= Block.SIZE;
                 autoDropCounter = 0;
             }
         }
